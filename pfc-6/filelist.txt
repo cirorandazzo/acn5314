@@ -1,0 +1,10 @@
+# CRCNS.org 'pfc-6' dataset files
+# To use this for fetching files, comment out files that are
+# not needed by putting a '#' as the first character on the line (default mode)
+# or put a '+' as the first character to specifiy files to be fetched (+ mode).
+# mode='default' (change to '+' for + mode).
+ docs/crcns_pfc-6_data_description.docx	25923 (25.3 KB)
+ docs/crcns_pfc-6_data_description.pdf	53518 (52.2 KB)
+ Load_And_View_Data_Examples.m	4859 (4.7 KB)
+ mPFC_Data.tar.gz	295335687 (281.6 MB)
+ checksums.md5	307

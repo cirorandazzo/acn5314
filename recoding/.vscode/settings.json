@@ -1,0 +1,52 @@
+{
+    "jupyter.kernels.filter": [
+        {
+            "path": "~/opt/anaconda3/envs/acn5314-lab2/bin/python",
+            "type": "pythonEnvironment"
+        },
+        {
+            "path": "~/opt/anaconda3/bin/python",
+            "type": "pythonEnvironment"
+        },
+        {
+            "path": "~/opt/anaconda3/envs/DailyHealthCheck/bin/python",
+            "type": "pythonEnvironment"
+        },
+        {
+            "path": "~/opt/anaconda3/envs/DLC-CPU/bin/python",
+            "type": "pythonEnvironment"
+        },
+        {
+            "path": "~/.conda/envs/messingaround/bin/python",
+            "type": "pythonEnvironment"
+        },
+        {
+            "path": "~/opt/anaconda3/envs/messingaround/bin/python",
+            "type": "pythonEnvironment"
+        },
+        {
+            "path": "~/opt/anaconda3/envs/msg/bin/python",
+            "type": "pythonEnvironment"
+        },
+        {
+            "path": "~/opt/anaconda3/envs/old_DLC-CPU/bin/python",
+            "type": "pythonEnvironment"
+        },
+        {
+            "path": "~/opt/anaconda3/envs/pltl-22s/bin/python",
+            "type": "pythonEnvironment"
+        },
+        {
+            "path": "/usr/bin/python",
+            "type": "pythonEnvironment"
+        },
+        {
+            "path": "~/opt/anaconda3/envs/scratch/bin/python",
+            "type": "pythonEnvironment"
+        },
+        {
+            "path": "~/opt/anaconda3/envs/Testing/bin/python",
+            "type": "pythonEnvironment"
+        }
+    ]
+}
