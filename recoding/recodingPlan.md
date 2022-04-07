@@ -55,3 +55,7 @@ use all "wake"; use some random subset of "pre-wake"/"post wake"
 - Train/test split (?)
 - Then, we test with bins from pre- and post-sleep.
 - T-test, pre vs. post -> we would expect this model is more accurate in predicting activity patterns from post-sleep, since the animal will rehearse those neural ensembles.
+
+## CR additional thoughts:
+- since we're only using data from 1 animal, cell type doesn't matter; cell ID is constant, so it's implicitly part of the data
+	- same with some of the other features we've talked about (rule ID, etc)
