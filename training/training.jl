@@ -1,3 +1,7 @@
+# TODO
+# -SVD
+# -play with hyperparameters (**iterations)
+
 using DataFrames
 using CSV
 using ScikitLearn
@@ -55,14 +59,14 @@ y_pred_pre_log = predict(simple_logistic, X_pre)
 y_pred_post_log = predict(simple_logistic, X_post)
 
 println("---Simple Logistic---")
-println("Train accuracy: ", accuracy_score(y_train, y_pred_train))
-println("Test accuracy: ", accuracy_score(y_test, y_pred_test))
+println("Train accuracy: ", accuracy_score(y_train, y_pred_train_log))
+println("Test accuracy: ", accuracy_score(y_test, y_pred_test_log))
 
 println("--Sleep Performance--")
-sleep_performance("Pre", y_pred_pre)
-sleep_performance("Post", y_pred_post)
+sleep_performance("Pre", y_pred_pre_log)
+sleep_performance("Post", y_pred_post_log)
 
-generate_confusion_matrix(y_test, y_pred_test)
+generate_confusion_matrix(y_test, y_pred_test_log)
 
 ## BASELINE: SHALLOW NEURAL NET ##
 # --- train
