@@ -1,3 +1,8 @@
+<script
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+  type="text/javascript">
+</script>
+
 # Learning & Sleep
 
 ACN5314 Neuro3
@@ -17,30 +22,42 @@ We hypothesize that our model will predict a larger proportion of post-SWS bins 
 
 ## Files
 
-3 files are included in recoded dataset:
+6 files are included in recoded dataset:
 1. 201222_beh_binned.csv
 2. 201222_pre_sws_binned.csv
 3. 201222_post_sws_binned.csv
-
+4. 201222_beh_svd.csv
+5. 201222_pre_svd.csv
+6. 201222_post_svd.csv
 
 ___
 
-*(1) 201222_beh_binned.csv*
+### (1) 201222_beh_binned.csv ###
 
-    Includes neural data recorded during trials of the behavioral contingency task. Columns (1-31) are ID numbers for each recorded neuron. Rows indicate start time of each 100ms bin. For each bin, the number of times that each neuron spiked is recorded. Notice that this can be interpreted as a frequency (spikes/100ms bin).
+Includes neural data recorded during trials of the behavioral contingency task. Columns (1-31) are ID numbers for each recorded neuron. Rows indicate start time of each 100ms bin. For each bin, the number of times that each neuron spiked is recorded. Notice that this can be interpreted as a frequency (spikes/100ms bin).
 
-    Column "correct" (boolean) indicates whether the animal responded correctly in the trial of the behavioral contingency task from which this bin was taken.
-
-
-*(2) 201222_pre_sws_binned.csv*
-
-    Same format as 201222_beh_binned.csv, without "correct" column. Data taken from periods of SWS data before behavior contigency task. See Peyrache et al. 2019 for characterization of SWS.
+Column "correct" (boolean) indicates whether the animal responded correctly in the trial of the behavioral contingency task from which this bin was taken.
 
 
-*(3) 201222_post_sws_binned.csv*
+### (2) and (3) 201222_(pre/post)_sws_binned.csv ###
 
-    Same format as 201222_beh_binned.csv, without "correct" column. Data taken from periods of SWS data after behavior contigency task. See Peyrache et al. 2019 for characterization of SWS.
-    
+Same format as 201222_beh_binned.csv, without "correct" column. Data taken from periods of SWS data before (pre) or after (post) behavior contigency task. See Peyrache et al. 2019 for characterization of SWS.
+
+
+### (4) 201222_beh_svd.csv ###
+
+For wake/behavior data $A_w$, we have SVD
+$$ A_w = U_w \cdot S \cdot V^T $$
+
+File contains first 6 rows of matrix $U_w$ .
+
+*(5) and (6) 201222_(pre/post)_svd.csv*
+
+We want to express sleep data $ A_s $ (either pre or post) in terms of an orthonormal basis of the row space, the columns of $ V^T $. These are our linearly independent ``activation patterns" of the 31 neurons. Thus, we take
+
+$$ U_s = A_s \cdot (V^T)^{-1} \cdot S^{-1} $$
+
+We then pick the first $n$ columns of $U_w$ and $U_s$. We train our model on some of the rows of $U_w$, then test on the remainder of $U_w$. Then, we apply the model to $U_{s-pre}$ and $U_{s-post}$ and compare predictive performance.
 
 ## References
 
