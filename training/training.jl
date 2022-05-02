@@ -1,7 +1,3 @@
-# TODO
-# -SVD
-# -play with hyperparameters (**iterations)
-
 using DataFrames
 using CSV
 using ScikitLearn
@@ -11,52 +7,47 @@ include("training_functions.jl")
 @sk_import model_selection: train_test_split;
     
 # Models
-@sk_import linear_model: LogisticRegression
-@sk_import neural_network: MLPClassifier
-
 using ScikitLearn.GridSearch: GridSearchCV
+@sk_import linear_model: LogisticRegression;
+@sk_import neural_network: MLPClassifier;
 
 # Metrics
 @sk_import metrics: accuracy_score;
 
-@sk_import metrics: confusion_matrix
-@sk_import metrics: ConfusionMatrixDisplay
+@sk_import metrics: confusion_matrix;
+@sk_import metrics: ConfusionMatrixDisplay;
 
-@sk_import metrics: classification_report
+@sk_import metrics: classification_report;
 
 # Data paths
-beh_data_path = joinpath(pwd(), "recoding/recoded_data/201222_beh_binned.csv")
-pre_data_path = joinpath(pwd(), "recoding/recoded_data/201222_pre_sws_binned.csv")
-post_data_path = joinpath(pwd(), "recoding/recoded_data/201222_post_sws_binned.csv")
+beh_path = joinpath(pwd(), "recoding/recoded_data/SVD/201222_beh_svd.csv");
+pre_path = joinpath(pwd(), "recoding/recoded_data/SVD/201222_pre_svd.csv");
+post_path = joinpath(pwd(), "recoding/recoded_data/SVD/201222_post_svd.csv");
 
 # Load data
-beh = CSV.read(beh_data_path, DataFrame)
-pre = CSV.read(pre_data_path, DataFrame)
-post = CSV.read(post_data_path, DataFrame)
+beh = CSV.read(beh_path, DataFrame)
+X_pre = Array(CSV.read(pre_path, DataFrame))
+X_post = Array(CSV.read(post_path, DataFrame))
 
 # Split training data (behavior session)
-X_beh = Array(beh[!,Not([:Column1, :correct])])
+X_beh = Array(beh[!,Not([:correct])])
 y_beh = Array(beh[!,:correct])
 
-X_train, X_test, y_train, y_test = train_test_split(X_beh, y_beh, test_size=0.2)
-
-# Remove time index from sleep data
-X_pre = Array(pre[!,Not(:Column1)]) 
-X_post = Array(post[!,Not(:Column1)])
+X_train, X_test, y_train, y_test = train_test_split(X_beh, y_beh, test_size=0.1)
 
 
 ## BASELINE: SIMPLE LOGISTIC REGRESSION ##
 # --- train
-simple_logistic = LogisticRegression(max_iter=10000)
+simple_logistic = LogisticRegression(max_iter=100000000);
 
 fit!(simple_logistic, X_train, y_train)
 
 # --- check accuracy
-y_pred_train_log = predict(simple_logistic, X_train)
-y_pred_test_log = predict(simple_logistic, X_test)
+y_pred_train_log = predict(simple_logistic, X_train);
+y_pred_test_log = predict(simple_logistic, X_test);
 
-y_pred_pre_log = predict(simple_logistic, X_pre)
-y_pred_post_log = predict(simple_logistic, X_post)
+y_pred_pre_log = predict(simple_logistic, X_pre);
+y_pred_post_log = predict(simple_logistic, X_post);
 
 println("---Simple Logistic---")
 println("Train accuracy: ", accuracy_score(y_train, y_pred_train_log))
@@ -65,6 +56,7 @@ println("Test accuracy: ", accuracy_score(y_test, y_pred_test_log))
 println("--Sleep Performance--")
 sleep_performance("Pre", y_pred_pre_log)
 sleep_performance("Post", y_pred_post_log)
+# It is still predicting everything as correct... I think we are having an issue where our "correct" patterns are still occuring during "incorrect" bins, possibly due to lack of temporal specificity (ie, the "wrong" trials occur in between "right" trials.)
 
 generate_confusion_matrix(y_test, y_pred_test_log)
 
@@ -81,7 +73,7 @@ y_pred_test_snn = predict(shallow_neural_net, X_test)
 y_pred_pre_snn = predict(shallow_neural_net, X_pre)
 y_pred_post_snn = predict(shallow_neural_net, X_post)
 
-println("---Simple Logistic---")
+println("---SNN---")
 println("Train accuracy: ", accuracy_score(y_train, y_pred_train_snn))
 println("Test accuracy: ", accuracy_score(y_test, y_pred_test_snn))
 
@@ -93,7 +85,7 @@ generate_confusion_matrix(y_test, y_pred_test_snn)
 
 ## Logistic: 3-Fold Cross Validation ##
 gridsearch_logistic = GridSearchCV(LogisticRegression(),
-Dict(:solver => ["newton-cg", "lbfgs", "liblinear"], :C => [0.01, 0.1, 0.5, 0.9], :max_iter => [10000]))
+Dict(:solver => ["newton-cg", "lbfgs", "liblinear"], :C => [0.01, 0.1, 0.5, 0.9], :max_iter => [10000]));
 
 # --- train
 fit!(gridsearch_logistic, X_train, y_train)
@@ -104,7 +96,7 @@ gridsearch_logistic_results)[!,Not(:parameters)]
 
 best_log_model = gridsearch_logistic.best_estimator_
 
-y_pred_train_best_log = predict(best_log_model, X_train)
+y_pred_train_best_log = predict(best_log_model, X_train);
 print(classification_report(y_pred_train_best_log, y_train))
 
 y_pred_test_best_log = predict(best_log_model, X_test)
